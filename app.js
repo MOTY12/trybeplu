@@ -1,9 +1,10 @@
 const express = require('express')
 const cors = require("cors")
 const mongoose = require('mongoose')
+const morgan = require("morgan")
 const dotenv = require('dotenv')
-const fs = require('fs')
 const app = express()
+const userRouter = require('./router/user')
 
 dotenv.config()
 
@@ -12,15 +13,11 @@ const mongoURI = process.env.DBCONNECT
 
 app.use(cors());
 app.use(express.json())
-    // app.use(morgan("dev"));
+app.use(morgan("dev"));
+app.use(`${apis}`, userRouter)
 
 
-fs.readdirSync("./router").map((r) =>
-    app.use(`${apis}`, require(`./router/${r}`))
-)
-
-
-app.get('/', (req, res) => {
+app.get('/moty', (req, res) => {
     res.send('helo world')
 })
 
